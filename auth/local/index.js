@@ -20,12 +20,12 @@ router.post('/', function(req, res, next) {
         }
     );
 
-    if (user.role != 'admin') return res.json(404,
+    /*if (user.role != 'admin') return res.json(404,
       {
           success: false,
           message: 'Authentication failed. Wrong role.'
       }
-    );
+    );*/
     var token = auth.signToken(user._id, user.role);
 
     var resUser = {
@@ -33,7 +33,8 @@ router.post('/', function(req, res, next) {
         email: user.email,
         name: user.name,
         provider: user.provider,
-        role: user.role
+        role: user.role,
+        avatar: user.avatar
     };
     res.json(
         {
