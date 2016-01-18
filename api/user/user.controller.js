@@ -4,6 +4,8 @@ var User = require('./user.model');
 var passport = require('passport');
 var config = require('../../config/config.js');
 var jwt = require('jsonwebtoken');
+var _ = require('lodash');
+
 
 var validationError = function(res, err) {
   return res.json(422, err);
@@ -96,6 +98,21 @@ exports.me = function(req, res, next) {
     res.json(user);
   });
 };
+
+// Updates an existing thing in the DB.
+exports.update = function(req, res) {
+  if(req.body._id) { delete req.body._id; }
+  User.findById(req.params.id, function (err, User) {
+    if (err) { return handleError(res, err); }
+    if(!User) { return res.send(404); }
+    var updated = _.merge(User, req.body);
+    updated.save(function (err) {
+      if (err) { return handleError(res, err); }
+      return res.json(200, User);
+    });
+  });
+};
+
 
 /**
  * Authentication callback
