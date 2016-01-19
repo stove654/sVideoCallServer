@@ -4,27 +4,25 @@
 
 'use strict';
 
-var post = require('./post.model');
+var chat = require('./chat.model');
 
 exports.register = function(socket) {
-  post.schema.post('save', function (doc) {
-    post.findById(doc.id)
+  chat.schema.post('save', function (doc) {
+    chat.findById(doc.id)
       .populate('user')
-      .populate('comments.user')
-      .populate('likes.user')
       .exec(function (err, data) {
         onSave(socket, data);
       });
   });
-  post.schema.post('remove', function (doc) {
+  chat.schema.post('remove', function (doc) {
     onRemove(socket, doc);
   });
 }
 
 function onSave(socket, doc, cb) {
-  socket.emit('post:save', doc);
+  socket.emit('chat:save', doc);
 }
 
 function onRemove(socket, doc, cb) {
-  socket.emit('post:remove', doc);
+  socket.emit('chat:remove', doc);
 }

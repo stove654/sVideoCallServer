@@ -22,6 +22,23 @@ exports.index = function(req, res) {
   });
 };
 
+exports.showPublic = function(req, res) {
+  User.find(function (err, users) {
+    var data = [];
+    for (var i = 0; i < users.length; i++) {
+      data.push({
+        email: users[i].email,
+        name: users[i].name,
+        _id: users[i]._id,
+        avatar: users[i].avatar,
+        status: users[i].status
+      })
+    }
+    if(err) return res.send(500, err);
+    res.json(200, data);
+  });
+};
+
 /**
  * Creates a new user
  */
@@ -101,6 +118,7 @@ exports.me = function(req, res, next) {
 
 // Updates an existing thing in the DB.
 exports.update = function(req, res) {
+  console.log(req.body);
   if(req.body._id) { delete req.body._id; }
   User.findById(req.params.id, function (err, User) {
     if (err) { return handleError(res, err); }
@@ -112,6 +130,7 @@ exports.update = function(req, res) {
     });
   });
 };
+
 
 
 /**

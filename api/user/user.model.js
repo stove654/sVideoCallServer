@@ -24,6 +24,7 @@ var UserSchema = new Schema({
   birthday: Date,
   workAt: String,
   cover: String,
+  status: Boolean,
   hashedPassword: String,
   provider: String,
   salt: String,

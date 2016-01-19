@@ -13,16 +13,17 @@ var PostSchema = new Schema({
   ],
   likes: [
     {
-      userId: { type: Schema.Types.ObjectId, ref: 'User' }
+      user: { type: Schema.Types.ObjectId, ref: 'User' }
     }
   ],
   comments: [
     {
-      userId: { type: Schema.Types.ObjectId, ref: 'User' },
-      comment: String
+      user: { type: Schema.Types.ObjectId, ref: 'User' },
+      comment: String,
+      createdAt: Date
     }
   ],
-  userId: { type: Schema.Types.ObjectId, ref: 'User' },
+  user: { type: Schema.Types.ObjectId, ref: 'User' },
   createdAt: Date
 });
 
