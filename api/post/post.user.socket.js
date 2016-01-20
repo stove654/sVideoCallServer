@@ -4,28 +4,29 @@
 
 'use strict';
 
-var post = require('./post.model');
+var postUser = require('./post.model');
 
 exports.register = function(socket) {
-  post.schema.post('save', function (doc) {
-    post.findById(doc.id)
+  postUser.schema.post('save', function (doc) {
+    postUser.findById(doc.id)
       .populate('user')
       .populate('comments.user')
       .populate('likes.user')
       .exec(function (err, data) {
+        console.log(data);
         onSave(socket, data);
       });
   });
-  post.schema.post('remove', function (doc) {
+  postUser.schema.post('remove', function (doc) {
     onRemove(socket, doc);
   });
 }
 
 function onSave(socket, doc, cb) {
-  socket.emit('post:save', doc);
+  socket.emit('postUser:save', doc);
 }
 
 function onRemove(socket, doc, cb) {
-  socket.emit('post:remove', doc);
+  socket.emit('postUser:remove', doc);
 }
 

@@ -21,6 +21,7 @@ function onConnect(socket) {
   require('../api/post/post.socket').register(socket);
   require('../api/chat/chat.socket').register(socket);
   require('../api/user/user.socket').register(socket);
+  require('../api/post/post.user.socket').register(socket);
 }
 
 module.exports = function (socketio) {

@@ -62,12 +62,12 @@ exports.create = function (req, res, next) {
  */
 exports.show = function (req, res, next) {
   var userId = req.params.id;
-
-  User.findById(userId, function (err, user) {
-    if (err) return next(err);
-    if (!user) return res.send(401);
-    res.json(user);
-  });
+  User.findById(userId)
+    .populate('follows.user')
+    .exec(function (err, user) {
+      if(err) { return handleError(res, err); }
+      return res.json(200, user);
+    });
 };
 
 /**
@@ -131,6 +131,39 @@ exports.update = function(req, res) {
   });
 };
 
+// Updates an existing User in the DB.
+exports.follow = function (req, res) {
+  var dataFollow = {
+    user: req.body.user
+  };
+
+  console.log(dataFollow);
+  User.findById(req.params.id, function (err, data) {
+    if (err) {
+      return handleError(res, err);
+    }
+    if (!data) {
+      return res.send(404);
+    }
+    var isFollow = false;
+    for (var i = 0; i < data.follows.length; i++) {
+      if (dataFollow.user == data.follows[i].user) {
+        isFollow = true;
+        data.follows.splice(i, 1)
+        break;
+      }
+    }
+    if (!isFollow) {
+      data.follows.push(dataFollow);
+    }
+    data.save(function (err, Post) {
+      if (err) {
+        return handleError(res, err);
+      }
+      return res.json(200, Post);
+    });
+  });
+};
 
 
 /**

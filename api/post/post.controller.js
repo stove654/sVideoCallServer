@@ -37,6 +37,18 @@ exports.postById = function (req, res) {
       return res.json(200, Posts);
     });
 };
+// Get list of Posts by userId
+exports.albumById = function (req, res) {
+  Post.find({user: req.params.id}, function (err, Posts) {
+    var data = [];
+    for (var i = 0; i < Posts.length; i++) {
+      data = data.concat(Posts[i].albums);
+    }
+    if(err) { return handleError(res, err); }
+    return res.json(200, data);
+  })
+};
+
 
 // Get a single Post
 exports.show = function (req, res) {

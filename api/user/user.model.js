@@ -14,9 +14,9 @@ var UserSchema = new Schema({
   },
   avatar: String,
   description: String,
-  friends: [
+  follows: [
     {
-      id: String
+      user: { type: Schema.Types.ObjectId, ref: 'User' }
     }
   ],
   address: String,
