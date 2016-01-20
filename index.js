@@ -7,6 +7,7 @@ var config = require('./config/config');
 // set port
 var port = process.env.PORT || 7000;
 
+
 // Connect to database
 mongoose.connect(config.database);
 
@@ -27,6 +28,7 @@ require('./routes')(app);
 app.get('/', function(request, response) {
     response.send('Hello World!');
 });
+
 server.listen(port, function () {
     console.log('HotTab server listening on port: ', port);
 });

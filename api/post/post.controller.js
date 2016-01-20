@@ -11,6 +11,7 @@
 
 var _ = require('lodash');
 var Post = require('./post.model');
+var Notification = require('../notification/notification.model');
 
 // Get list of Posts
 exports.index = function (req, res) {
@@ -83,6 +84,13 @@ exports.create = function (req, res) {
     if (err) {
       return handleError(res, err);
     }
+    var notification = {
+      userFrom: req.body.user,
+      action: 6,
+      createdAt: new Date()
+    };
+
+    Notification.create(notification);
     return res.json(201, Post);
   });
 };
@@ -127,6 +135,14 @@ exports.comment = function (req, res) {
     if (!data) {
       return res.send(404);
     }
+    var notification = {
+      userFrom: dataComment.user,
+      userTo: data.user,
+      action: 5,
+      createdAt: new Date()
+    };
+
+    Notification.create(notification);
     data.comments.push(dataComment);
     data.save(function (err, Post) {
       if (err) {
@@ -160,9 +176,20 @@ exports.like = function (req, res) {
         break;
       }
     }
+    var notification = {
+      userFrom: dataLike.user,
+      userTo: data.user,
+      createdAt: new Date()
+    };
+
     if (!isLike) {
       data.likes.push(dataLike);
+      notification.action = 1;
+    } else {
+      notification.action = 2;
     }
+    Notification.create(notification);
+
     data.save(function (err, Post) {
       if (err) {
         return handleError(res, err);

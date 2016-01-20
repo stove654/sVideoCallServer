@@ -5,6 +5,7 @@ var passport = require('passport');
 var config = require('../../config/config.js');
 var jwt = require('jsonwebtoken');
 var _ = require('lodash');
+var Notification = require('../notification/notification.model')
 
 
 var validationError = function(res, err) {
@@ -153,9 +154,19 @@ exports.follow = function (req, res) {
         break;
       }
     }
+    var notification = {
+      userFrom: dataFollow.user,
+      userTo: req.params.id,
+      createdAt: new Date()
+    };
+
     if (!isFollow) {
       data.follows.push(dataFollow);
+      notification.action = 3;
+    } else {
+      notification.action = 4;
     }
+    Notification.create(notification);
     data.save(function (err, Post) {
       if (err) {
         return handleError(res, err);
