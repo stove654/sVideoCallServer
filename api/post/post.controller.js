@@ -20,6 +20,7 @@ exports.index = function (req, res) {
     .populate('comments.user')
     .populate('likes.user')
     .sort({'createdAt': 'desc'})
+    .limit(20)
     .exec(function (err, Posts) {
       if(err) { return handleError(res, err); }
       return res.json(200, Posts);
@@ -170,7 +171,7 @@ exports.like = function (req, res) {
     }
     var isLike = false;
     for (var i = 0; i < data.likes.length; i++) {
-      if (dataLike.id == data.likes[i]._id) {
+      if (dataLike.user == data.likes[i].user) {
         isLike = true;
         data.likes.splice(i, 1)
         break;

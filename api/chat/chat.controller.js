@@ -16,7 +16,10 @@ var Chat = require('./chat.model');
 exports.index = function(req, res) {
   Chat.find()
     .populate('user')
+    .sort({'createdAt': 'desc'})
+    .limit(100)
     .exec(function (err, Chats) {
+      Chats.reverse();
       if(err) { return handleError(res, err); }
       return res.json(200, Chats);
     });

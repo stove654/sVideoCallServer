@@ -18,6 +18,7 @@ exports.index = function(req, res) {
     .populate('userFrom')
     .populate('userTo')
     .sort({'createdAt': 'desc'})
+    .limit(20)
     .exec(function (err, Notifications) {
       if(err) { return handleError(res, err); }
       return res.json(200, Notifications);
